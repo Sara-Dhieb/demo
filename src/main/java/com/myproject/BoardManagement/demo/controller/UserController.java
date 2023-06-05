@@ -1,5 +1,6 @@
 package com.myproject.BoardManagement.demo.controller;
 
+import com.myproject.BoardManagement.demo.dto.UserDto;
 import com.myproject.BoardManagement.demo.model.Action;
 import com.myproject.BoardManagement.demo.model.User;
 import com.myproject.BoardManagement.demo.repository.UserRepository;
@@ -7,12 +8,14 @@ import com.myproject.BoardManagement.demo.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 @CrossOrigin("http://localhost:4200/")
 @RestController
+@PreAuthorize("hasRole('admin')")
 public class UserController {
 
     @Autowired
@@ -27,6 +30,7 @@ public class UserController {
     public ResponseEntity<User> saveEmployee(@RequestBody User user) {
         return ResponseEntity.ok(userServiceImpl.saveUser(user));
     }
+
 
     @GetMapping("/user/user")
     public ResponseEntity<List<User>> getUser() {
@@ -49,6 +53,11 @@ public class UserController {
             @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         List<Action> actions = userServiceImpl.getActionsByUsernameAndDate(username, date);
         return ResponseEntity.ok(actions);
+    }
+
+    @PostMapping("/test/create-user")
+    public ResponseEntity<User> addUser(@RequestBody UserDto user) {
+        return ResponseEntity.ok(userServiceImpl.addUser(user));
     }
 
 

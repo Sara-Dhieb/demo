@@ -1,10 +1,19 @@
 package com.myproject.BoardManagement.demo.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Table;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,13 +21,12 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity
-@Table(appliesTo="resolution")
+@Table(appliesTo = "resolution")
 public class Resolution {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ResolutionId")
     private int ResolutionId;
-    @Size(max = 100)
     private String title;
     private String description;
     @ManyToOne(fetch = FetchType.LAZY)

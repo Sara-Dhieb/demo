@@ -21,13 +21,10 @@ public class User {
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         private int id;
-
-
         private String department;
         private String email;
         @Column(name = "username",unique = true)
         private String username;
-        private String password;
         private String firstname;
         private String lastName;
         private String role;

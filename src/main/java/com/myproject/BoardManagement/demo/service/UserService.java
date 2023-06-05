@@ -1,5 +1,6 @@
 package com.myproject.BoardManagement.demo.service;
 
+import com.myproject.BoardManagement.demo.dto.UserDto;
 import com.myproject.BoardManagement.demo.model.Action;
 import com.myproject.BoardManagement.demo.model.User;
 
@@ -14,5 +15,7 @@ public interface UserService {
 
     List<Action> findUserActions(String username);
     List<Action> getActionsByUsernameAndDate(String username, Date date);
+
+    User addUser(UserDto userDto) ;
 
 }

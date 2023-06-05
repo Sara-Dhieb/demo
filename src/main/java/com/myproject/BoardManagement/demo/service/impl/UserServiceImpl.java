@@ -1,10 +1,13 @@
 package com.myproject.BoardManagement.demo.service.impl;
 
+import com.myproject.BoardManagement.demo.dto.UserDto;
 import com.myproject.BoardManagement.demo.model.Action;
 import com.myproject.BoardManagement.demo.model.User;
 import com.myproject.BoardManagement.demo.repository.ActionRepository;
 import com.myproject.BoardManagement.demo.repository.UserRepository;
 import com.myproject.BoardManagement.demo.service.UserService;
+import com.myproject.BoardManagement.demo.service.keycloak.KeycloakUserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +22,19 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     ActionRepository actionRepository;
+    @Autowired
+    KeycloakUserService keycloakUserService;
+
+    ModelMapper modelMapper = new ModelMapper();
 
 
     //        @Autowired
 //        KeyCloakService keyCloakService;
     @Override
     public User saveUser(User user) {
-//            keyCloakService.createUser();
         List<Action> actionList = new ArrayList<>();
-        User userToAdd = null;
-        if (user.getAction() != null && !user.getAction().isEmpty() )
-        {
-            user.getAction().forEach( action -> {
+        if (user.getAction() != null && !user.getAction().isEmpty()) {
+            user.getAction().forEach(action -> {
                         Action.ActionType actionType = action.getActionType();
 //                        treating the exception where actionType not of Type Action.ActionType
 
@@ -48,7 +52,7 @@ public class UserServiceImpl implements UserService {
             );
         }
 //        password and department aren't present that's why not saved in the database
-        User user1=User.builder()
+        User user1 = User.builder()
                 .username(user.getUsername())
                 .action(actionList)
                 .lastName(user.getLastName())
@@ -78,6 +82,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsernameContaining(searchString);
 
     }
+
     @Override
     public List<Action> findUserActions(String username) {
         User user = userRepository.findByUsername(username);
@@ -87,6 +92,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User not found");
         }
     }
+
     @Override
     public List<Action> getActionsByUsernameAndDate(String username, Date date) {
         User user = userRepository.findByUsername(username);
@@ -102,6 +108,12 @@ public class UserServiceImpl implements UserService {
         return actionDates;
     }
 
+    @Override
+    public User addUser(UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        keycloakUserService.createUser(userDto);
+        return saveUser(user);
+    }
 
 
 }
