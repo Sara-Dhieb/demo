@@ -11,6 +11,7 @@ import com.myproject.BoardManagement.demo.service.ReunionService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,23 +48,29 @@ public class ReunionServiceImpl implements ReunionService {
         }
 
         List<Document> documents = new ArrayList<>();
-        if (reunionRequest.getStringHashMap() != null && !reunionRequest.getStringHashMap().isEmpty()) {
+        if (reunionRequest.getFiles().length > 0) {
 //            we defined user as an id in the ReunionRequest
-            reunionRequest.getStringHashMap().forEach((key,value) -> {
-                byte[] fileContent = null;
+            Document document = null;
+            for (MultipartFile file : reunionRequest.getFiles()) {
+                String fileName = file.getOriginalFilename();
+                String fileType = file.getContentType();
+                byte[] fileContent;
                 try {
-                    fileContent = FileUtils.readFileToByteArray(new File(key));
-                    Document document = Document.builder()
-                            .name(value)
-                            .fileContent(fileContent)
-                            .date(new Date()).build();
-                    Document savedDocument = documentRepository.save(document);
-                    documents.add(savedDocument);
+                    fileContent = file.getBytes();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                String encodedString = Base64.getEncoder().encodeToString(fileContent);
-            });
+                document = Document.builder()
+                        .name(fileName)
+                        .fileContent(fileContent)
+                        .fileType(fileType)
+                        .date(new Date()).build();
+
+            }
+            Document savedDocument = documentRepository.save(document);
+            documents.add(savedDocument);
+
+//
         }
 
         Reunion reunion = Reunion.builder()

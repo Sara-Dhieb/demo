@@ -23,6 +23,7 @@ public class Document {
     //save as base 64 (pdf/excel)
     private Date date;
     @Lob private byte[] fileContent;
+    private String fileType;
 
 
 
