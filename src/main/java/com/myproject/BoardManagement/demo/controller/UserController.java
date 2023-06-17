@@ -59,6 +59,9 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody UserDto user) {
         return ResponseEntity.ok(userServiceImpl.addUser(user));
     }
-
+    @GetMapping("user/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+       return  ResponseEntity.ok(userServiceImpl.getUserById(id));
+    }
 
 }

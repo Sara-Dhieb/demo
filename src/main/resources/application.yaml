@@ -1,6 +1,6 @@
 keycloak:
   realm: testProject
-  auth-server-url: http://localhost:8888/auth
+  auth-server-url: http://localhost:8080/auth
   resource: authApp
   public-client: true
   bearer-only: true
@@ -23,3 +23,9 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+  # Enable gzip compression
+  server:
+    compression:
+      enabled: true
+      mime-types: application/json,application/xml,text/html,text/plain

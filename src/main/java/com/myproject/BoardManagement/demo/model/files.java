@@ -2,9 +2,9 @@ package com.myproject.BoardManagement.demo.model;
 
 import lombok.*;
 import org.hibernate.annotations.Table;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -14,15 +14,16 @@ import java.util.Date;
 @Setter
 @Entity
 @Builder
-@Table(appliesTo="document")
-public class Document {
+@Table(appliesTo="files")
+public class files {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
     //save as base 64 (pdf/excel)
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date date;
-    @Lob private byte[] fileContent;
+    @Lob private String fileContent;
     private String fileType;
 
 

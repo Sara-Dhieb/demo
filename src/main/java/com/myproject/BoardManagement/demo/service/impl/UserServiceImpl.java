@@ -2,6 +2,7 @@ package com.myproject.BoardManagement.demo.service.impl;
 
 import com.myproject.BoardManagement.demo.dto.UserDto;
 import com.myproject.BoardManagement.demo.model.Action;
+import com.myproject.BoardManagement.demo.model.Reunion;
 import com.myproject.BoardManagement.demo.model.User;
 import com.myproject.BoardManagement.demo.repository.ActionRepository;
 import com.myproject.BoardManagement.demo.repository.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -30,6 +32,15 @@ public class UserServiceImpl implements UserService {
 
     //        @Autowired
 //        KeyCloakService keyCloakService;
+    @Override
+    public User getUserById(int id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        else
+            return null;
+    };
     @Override
     public User saveUser(User user) {
         List<Action> actionList = new ArrayList<>();

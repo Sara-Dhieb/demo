@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface UserService {
+    User getUserById(int id);
      User saveUser(User user) ;
     List<User> findAllUsers();
 //    User findUserByUsername(String username);

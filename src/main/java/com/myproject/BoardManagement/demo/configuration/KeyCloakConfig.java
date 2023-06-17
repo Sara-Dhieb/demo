@@ -11,7 +11,7 @@ public class KeyCloakConfig {
     @Bean
     public Keycloak keycloakClient() {
         return Keycloak.getInstance(
-                "http://localhost:8888/auth",
+                "http://localhost:8080/auth",
                 "master",
                 "admin",
                 "admin",

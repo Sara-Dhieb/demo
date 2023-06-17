@@ -1,10 +1,10 @@
 package com.myproject.BoardManagement.demo.service;
 
-import com.myproject.BoardManagement.demo.model.Document;
+import com.myproject.BoardManagement.demo.model.files;
 
 public interface DocumentService {
 
-    void addDocument(Document document);
-    Document getDocument(String id);
+    void addDocument( files document);
+    files getDocument(String id);
 
 }

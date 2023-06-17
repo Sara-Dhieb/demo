@@ -39,6 +39,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .csrf().disable().antMatcher("/**")
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/public/login").permitAll()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/public/*").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
                         "/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()

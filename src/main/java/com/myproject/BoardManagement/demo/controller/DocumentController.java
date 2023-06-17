@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 
-import com.myproject.BoardManagement.demo.model.Document;
+import com.myproject.BoardManagement.demo.model.files;
 import com.myproject.BoardManagement.demo.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
