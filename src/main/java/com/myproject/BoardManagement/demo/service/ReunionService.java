@@ -3,6 +3,7 @@ package com.myproject.BoardManagement.demo.service;
 import com.myproject.BoardManagement.demo.ReunionRequest;
 import com.myproject.BoardManagement.demo.model.Reunion;
 import com.myproject.BoardManagement.demo.model.files;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -18,5 +19,7 @@ public interface ReunionService {
     List<Reunion> getReunionsByUsername(String username);
     List<Reunion> findAllReunions();
     void deleteReunionById(int id);
+    Reunion updateReunion(ReunionRequest reunionRequest, int reunionId);
+
 
 }

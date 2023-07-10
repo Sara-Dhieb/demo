@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -20,15 +21,28 @@ import java.util.Optional;
 public class ReunionController {
     @Autowired
     ReunionServiceImpl reunionServiceImpl;
+    private SimpMessagingTemplate messagingTemplate;
     @GetMapping("/reunions")
     public ResponseEntity<List<Reunion>> findAllReunions() {
+
         return ResponseEntity.ok(reunionServiceImpl.findAllReunions());
     }
 
     @PostMapping("/reunion")
     public ResponseEntity<Reunion> saveReunion(@RequestBody ReunionRequest reunionRequest) {
-        return ResponseEntity.ok(reunionServiceImpl.saveReunion(reunionRequest));
+        Reunion savedReunion =reunionServiceImpl.saveReunion(reunionRequest);
+        return ResponseEntity.ok(savedReunion);
     }
+    @PutMapping("/reunion")
+    public ResponseEntity<Reunion> updateReunion(@RequestBody ReunionRequest reunionRequest, @RequestParam("reunionId") int reunionId) {
+        Reunion savedReunion = reunionServiceImpl.updateReunion(reunionRequest, reunionId);
+        if (savedReunion != null) {
+            return ResponseEntity.ok(savedReunion);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @GetMapping("/Reunion/{reunionId}")
     public ResponseEntity<Reunion> getReunionDetails(@PathVariable int reunionId) {
@@ -57,7 +71,7 @@ public class ReunionController {
     }
     @DeleteMapping("reunion/{id}")
     public ResponseEntity<Void> deleteReunion(@PathVariable("id") int id) {
-        reunionServiceImpl.deleteReunionById(id);
+        reunionServiceImpl.deleteReunionById(id);;
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

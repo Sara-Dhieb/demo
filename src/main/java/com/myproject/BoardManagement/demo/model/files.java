@@ -25,6 +25,9 @@ public class files {
     private Date date;
     @Lob private String fileContent;
     private String fileType;
+//    @ManyToOne
+//    @JoinColumn(name = "reunion_id")
+//    private Reunion reunion;
 
 
 

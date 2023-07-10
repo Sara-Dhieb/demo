@@ -64,23 +64,6 @@ public class ReunionServiceImpl implements ReunionService {
                         documents.add(savedDocument);
             }
 
-//            for (MultipartFile file : files) {
-//                String fileName = file.getOriginalFilename();
-//                String fileType = file.getContentType();
-//                byte[] fileContent;
-//                try {
-//                    fileContent = file.getBytes();
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                Document document = Document.builder()
-//                        .name(fileName)
-//                        .fileContent(fileContent)
-//                        .fileType(fileType)
-//                        .date(new Date()).build();
-//                Document savedDocument = documentRepository.save(document);
-//                documents.add(savedDocument);
-//            }
         }
         Reunion reunion = Reunion.builder()
                 .date(reunionRequest.getDate())
@@ -92,6 +75,64 @@ public class ReunionServiceImpl implements ReunionService {
 
         return reunionRepository.save(reunion);
     }
+    @Override
+    public Reunion updateReunion(ReunionRequest reunionRequest, int reunionId) {
+        Optional<Reunion> existingReunion = reunionRepository.findById(reunionId);
+
+        if (existingReunion.isPresent()) {
+            Reunion reunion = existingReunion.get();
+
+            // Fetch the corresponding User entities using the provided user IDs
+            List<User> users = new ArrayList<>();
+            for (int userId : reunionRequest.getUsers()) {
+                User user = findUserById(userId);
+                if (user != null) {
+                    users.add(user);
+                } else {
+                    System.err.println("The variable is null");
+                }
+            }
+            List<files> documents = new ArrayList<>();
+
+            if (reunionRequest.getFiles() != null && !reunionRequest.getFiles().isEmpty()) {
+            reunion.getFiles().clear();
+                for (files document:reunionRequest.getFiles() ){
+
+                    document = files.builder()
+                            .name(document.getName())
+                            .fileContent(document.getFileContent())
+                            .fileType(document.getFileType())
+                            .date(new Date()).build();
+                    files savedDocument = filesRepository.save(document);
+                    documents.add(savedDocument);
+                }
+
+            }
+
+            // Update the existing reunion with the data from the request
+            reunion.setDate(reunionRequest.getDate());
+            reunion.setTime(reunionRequest.getTime());
+            reunion.setSubject(reunionRequest.getSubject());
+            reunion.setUsers(users); // Set the list of User entities
+            reunion.setFiles(documents);
+
+            // Save the updated reunion back to the database
+            return reunionRepository.save(reunion);
+        } else {
+            // If the reunion with the given ID doesn't exist, you can either throw an exception or handle it as needed.
+            // For now, I'll return null in case the reunion doesn't exist.
+            return null;
+        }
+    }
+
+
+    // Helper method to find a User entity by its ID
+    private User findUserById(int userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.orElse(null);
+    }
+
+
 
     public Reunion findReunionById(int id){
         Optional<Reunion> reunion = reunionRepository.findById(id);

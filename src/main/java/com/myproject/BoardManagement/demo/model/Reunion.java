@@ -24,6 +24,7 @@ public class Reunion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ReunionId")
+    //pourquoi il prend la valeur comme reuninId
     private int ReunionId;
 // rechercher la reunion par la date
     // get doc by id
@@ -33,7 +34,8 @@ public class Reunion {
     private String subject;
     //1 to many
     @OneToMany(  fetch=FetchType.LAZY)
-    @JoinColumn(name = "doc_id")
+    @JoinColumn(name = "reunion_id")
+//    @OneToMany(mappedBy="reunion")
     private List<files> files;
     //1 to many
     @ManyToMany
@@ -43,7 +45,7 @@ public class Reunion {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
 
     private  List<User> users;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "reunion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Minute minute;
     @OneToOne(cascade = CascadeType.ALL)
     private User createdBy;
